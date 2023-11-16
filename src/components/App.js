@@ -15,11 +15,16 @@ export default function App() {
   function handleAddItems(item) {
     setMyItems((items) => [...items, item]);
   }
+
+  function handelDeletItem(id) {
+    setMyItems((myItems) => myItems.filter((item) => item.id));
+  }
+
   return (
     <div className="app">
       <Logo />
       <Form onAddItem={handleAddItems} />
-      <PackingList myItems={myItems} />
+      <PackingList myItems={myItems} handelDeletItem={handelDeletItem} />
       <Stats />
     </div>
   );
