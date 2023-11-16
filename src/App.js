@@ -1,17 +1,22 @@
 import React, { useState } from "react";
 
-const initialItems = [
-  { id: 1, description: " Passports", quantity: 2, packed: false },
-  { id: 2, description: " Socks", quantity: 12, packed: false },
-  { id: 3, description: " Pants", quantity: 3, packed: true },
-];
+// const initialItems = [
+//   { id: 1, description: " Passports", quantity: 2, packed: false },
+//   { id: 2, description: " Socks", quantity: 12, packed: false },
+//   { id: 3, description: " Pants", quantity: 3, packed: true },
+// ];
 
 export default function App() {
+  const [myItems, setMyItems] = useState([]);
+
+  function handleAddItems(item) {
+    setMyItems((myItems) => [...myItems, item]);
+  }
   return (
     <div className="app">
       <Logo />
-      <Form />
-      <PackingList />
+      <Form onAddItem={handleAddItems} />
+      <PackingList myItems={myItems} />
       <Stats />
     </div>
   );
@@ -21,13 +26,21 @@ function Logo() {
   return <h1> 🌴 Travels 👜 </h1>;
 }
 
-function Form() {
+function Form({ onAddItem }) {
   const [discription, setDiscription] = useState("");
   const [quantity, setQuantity] = useState(1);
 
   function handelSubmit(e) {
     e.preventDefault();
-    console.log(e);
+
+    if (!discription) return;
+
+    const newItem = { discription, quantity, packed: false, id: Date.now() };
+
+    onAddItem(newItem);
+
+    setDiscription("");
+    setQuantity(1);
   }
   return (
     <form className="add-form" onSubmit={handelSubmit}>
@@ -53,11 +66,11 @@ function Form() {
   );
 }
 
-function PackingList() {
+function PackingList({ myItems }) {
   return (
     <div className="list">
       <ul>
-        {initialItems.map((item) => (
+        {myItems.map((item) => (
           <Item item={item} key={item.id} />
         ))}
       </ul>
